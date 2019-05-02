@@ -3,16 +3,23 @@ import {Blank} from '../objects/Blank';
 import {Player} from '../objects/Player';
 import {Card} from '../objects/Card';
 import { API, graphqlOperation } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import * as mutations from '../../../graphql/mutations';
 import * as subscriptions from '../../../graphql/subscriptions'
 import * as queries from '../../../graphql/queries'
 
+
 export class GameBoard extends Phaser.Scene {
 	constructor() {
 		super({
-			key: 'GameBoard'
+			key: 'GameBoard',
 		});
+		
+
 	}
+	
+
+
 	create() {
 		this.gameBoard = [0,1,2,3,4,5,6,7,8,9,10,
 			11,12,13,14,15,16,17,18,19,20,21,22,
@@ -64,18 +71,20 @@ export class GameBoard extends Phaser.Scene {
 			 let player=[]
 			 player.push(player1)
 			 player.push(player2)
+
+		//need user name array
+			
 			 
-			 let gameState='playing'
-			 let id=0
-			 this.clickedBox(ranNums,player,id);
 		   
 	}
 
+	//move card
 	decideMove(x,y,player){
 		player.setX(x)
 		player.setY(y)
 	}
 
+	//move the card to the side
 	handlePlayer1Card(card,arrangepostion){
 		card.setX(10+arrangepostion);
 		card.setY(40);
@@ -89,6 +98,7 @@ export class GameBoard extends Phaser.Scene {
 	handlePlayer3Card(){
 		
 	}
+
 	async updateCardData(card,x,y){
 		const cardV = card;
 		console.log(cardV)
@@ -103,59 +113,35 @@ export class GameBoard extends Phaser.Scene {
 						};
 	 const newThing = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
 	}
+	
 
-	async updateblanck(card,x,y){
-		const cardV = card;
-		console.log(cardV)
-		const xV =x;
-		console.log("x : "+xV)
-		const yV = y;
-		console.log("y : "+yV)
-		const thething = {
-					whichCard : cardV,
-							x : xV,
-							y : yV
-						};
-	 const newThing = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
-	}
+
 
 	
-	clickedBox(ranNums,player,id){
+	clickedBox(player){
 		var arrangepostion=0;
-		var seat=0
 		this.input.on('gameobjectdown', (pointer, gameObject) => {
 			for(var i=0;i<36;i++){
 				if(this.gameBoard[i] == i ){
-					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
-						this.decideMove(gameObject.x,gameObject.y,player[seat])
+					if(gameObject.x==player.x||gameObject.y==player.y){
+						this.decideMove(gameObject.x,gameObject.y,player)
 						if(gameObject.data.get('card_number') == i){
 							this.handlePlayer1Card(gameObject,arrangepostion)
 							arrangepostion += 20
-							this.updateCardData(ranNums[i],player[seat].x,player[seat].y)
+							this.updateCardData(3,player.x,player.y)
 						}else if(gameObject.data.get('blank')){
-							this.updateblanck(-1,player[seat].x,player[seat].y)
+							this.updateCardData(-1,player.x,player.y)
 							break;
-							
 						}
-						// if(seat==0){
-						// 	seat=1
-						// }else{
-						// 	seat=0
-						// }
 					}	
 				
-			}
-	
-
-		
+			}	
 	
 	}
 
 			
 	});
 
-	
-	
 }
 	
 	update(time, delta) {
