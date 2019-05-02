@@ -114,6 +114,16 @@ export class GameBoard extends Phaser.Scene {
 	 const newThing = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
 	}
 	
+	checkUserInfo(name,player) {
+    Auth.currentUserInfo().then((userInfo) => {
+      const { username } = userInfo;
+      if(name==username){
+				this.clickedBox(player)
+			}else{
+				console.log('update')
+			}
+    })
+  }
 
 
 
