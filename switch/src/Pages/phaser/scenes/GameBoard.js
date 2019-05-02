@@ -73,7 +73,9 @@ export class GameBoard extends Phaser.Scene {
 			 player.push(player2)
 
 		//need user name array
-			
+		let userName=['switch','noviah']
+		var seat=0
+		this.checkUserInfo(userName[seat],player[seat])	
 			 
 		   
 	}
