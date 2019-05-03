@@ -108,12 +108,14 @@ export class GameBoard extends Phaser.Scene {
 	//move the card to the side
 	handlePlayerCard(card,arrangepostion,seat,data){
 		if(seat==0&&data!=53){
+		arrangepostion-=10
 		card.setX(10+arrangepostion);
-		card.setY(40);
+		card.setY(70);
 		card.setScale(0.1,0.1)
 		}else if(seat==1&&data!=53){
-		card.setX(500+arrangepostion);
-		card.setY(40);
+		arrangepostion-=10
+		card.setX(900+arrangepostion);
+		card.setY(70);
 		card.setScale(0.1,0.1)
 		}
 	}
@@ -149,17 +151,16 @@ export class GameBoard extends Phaser.Scene {
 					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
 						this.checkUserInfo(userName[seat],gameObject.x,gameObject.y,player[seat])
 						this.handlePlayerCard(gameObject,arrangepostion,seat,gameObject.data.get('card_number'))
-						arrangepostion += 20
-						console.log(gameObject.data.get('card_number'))
-						if(gameObject.data.get('card_number') == i){
-							console.log("move card")
-							 //this.handlePlayer1Card(gameObject,arrangepostion,seat)
+						arrangepostion+=15
+						// if(gameObject.data.get('card_number') == i){
+						// 	console.log("move card")
+						// 	 //this.handlePlayer1Card(gameObject,arrangepostion,seat)
 							 
-							//this.updateCardData(3,player[seat].x,player[seat].y)
-						}else if(gameObject.data.get('blank')){
-							//this.updateCardData(-1,player[seat].x,player[seat].y)
-							break;
-						}
+						// 	//this.updateCardData(3,player[seat].x,player[seat].y)
+						// }else if(gameObject.data.get('blank')){
+						// 	//this.updateCardData(-1,player[seat].x,player[seat].y)
+						// 	break;
+						// }
 						if(seat<1){
 							seat++
 						}else{
