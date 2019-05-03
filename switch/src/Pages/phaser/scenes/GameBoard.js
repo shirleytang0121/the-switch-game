@@ -32,7 +32,7 @@ export class GameBoard extends Phaser.Scene {
 		let y_pos1=0;
 		for(var i=0;i<6;i++){
 			for(var j=0 ;j<6;j++){
-			   this.blank=new Blank(this,405+x_pos1,85+y_pos1,'blank').data.set('blank', 53);
+			   this.blank=new Blank(this,405+x_pos1,85+y_pos1,'blank').data.set('card_number', 53);
 				x_pos1+=65;
 			 }
 			   y_pos1+=65;
@@ -106,19 +106,19 @@ export class GameBoard extends Phaser.Scene {
 	}
 
 	//move the card to the side
-	handlePlayer1Card(card,arrangepostion){
+	handlePlayerCard(card,arrangepostion,seat,data){
+		if(seat==0&&data!=53){
 		card.setX(10+arrangepostion);
 		card.setY(40);
 		card.setScale(0.1,0.1)
+		}else if(seat==1&&data!=53){
+		card.setX(500+arrangepostion);
+		card.setY(40);
+		card.setScale(0.1,0.1)
+		}
 	}
 
-	handlePlaye2Card(){
-		
-	}
-
-	handlePlayer3Card(){
-		
-	}
+	
 
 	//update movement to the database
 	async updateCardData(card,x,y){
@@ -148,15 +148,18 @@ export class GameBoard extends Phaser.Scene {
 				if(this.gameBoard[i] == i ){
 					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
 						this.checkUserInfo(userName[seat],gameObject.x,gameObject.y,player[seat])
-						
-						// if(gameObject.data.get('card_number') == i){
-						// 	// this.handlePlayer1Card(gameObject,arrangepostion)
-						// 	// arrangepostion += 20
-						// 	//this.updateCardData(3,player[seat].x,player[seat].y)
-						// }else if(gameObject.data.get('blank')){
-						// 	//this.updateCardData(-1,player[seat].x,player[seat].y)
-						// 	break;
-						// }
+						this.handlePlayerCard(gameObject,arrangepostion,seat,gameObject.data.get('card_number'))
+						arrangepostion += 20
+						console.log(gameObject.data.get('card_number'))
+						if(gameObject.data.get('card_number') == i){
+							console.log("move card")
+							 //this.handlePlayer1Card(gameObject,arrangepostion,seat)
+							 
+							//this.updateCardData(3,player[seat].x,player[seat].y)
+						}else if(gameObject.data.get('blank')){
+							//this.updateCardData(-1,player[seat].x,player[seat].y)
+							break;
+						}
 						if(seat<1){
 							seat++
 						}else{
