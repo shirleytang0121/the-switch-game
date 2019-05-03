@@ -71,14 +71,33 @@ export class GameBoard extends Phaser.Scene {
 			 let player=[]
 			 player.push(player1)
 			 player.push(player2)
-
+				
+			 let gameState='gaming';
 		//need user name array
 		let userName=['switch','noviah']
-		var seat=0
-		this.checkUserInfo(userName[seat],player[seat])	
-			 
+
+		let seat=0;
+			
+		this.clickedBox(player,seat,userName)
 		   
 	}
+
+	//check if the login user is in his round
+	checkUserInfo(name,x,y,player) {
+    Auth.currentUserInfo().then((userInfo) => {
+			const { username } = userInfo;
+      if(name==username){
+				this.decideMove(x,y,player)
+			}else{
+				console.log('update')
+				
+			}
+		
+		}
+		)
+  }
+		
+
 
 	//move card
 	decideMove(x,y,player){
@@ -101,6 +120,7 @@ export class GameBoard extends Phaser.Scene {
 		
 	}
 
+	//update movement to the database
 	async updateCardData(card,x,y){
 		const cardV = card;
 		console.log(cardV)
@@ -116,35 +136,33 @@ export class GameBoard extends Phaser.Scene {
 	 const newThing = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
 	}
 	
-	checkUserInfo(name,player) {
-    Auth.currentUserInfo().then((userInfo) => {
-      const { username } = userInfo;
-      if(name==username){
-				this.clickedBox(player)
-			}else{
-				console.log('update')
-			}
-    })
-  }
-
-
-
 	
-	clickedBox(player){
+
+
+
+	//click the card and make it move
+	clickedBox(player,seat,userName){
 		var arrangepostion=0;
 		this.input.on('gameobjectdown', (pointer, gameObject) => {
 			for(var i=0;i<36;i++){
 				if(this.gameBoard[i] == i ){
-					if(gameObject.x==player.x||gameObject.y==player.y){
-						this.decideMove(gameObject.x,gameObject.y,player)
-						if(gameObject.data.get('card_number') == i){
-							this.handlePlayer1Card(gameObject,arrangepostion)
-							arrangepostion += 20
-							this.updateCardData(3,player.x,player.y)
-						}else if(gameObject.data.get('blank')){
-							this.updateCardData(-1,player.x,player.y)
-							break;
+					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
+						this.checkUserInfo(userName[seat],gameObject.x,gameObject.y,player[seat])
+						
+						// if(gameObject.data.get('card_number') == i){
+						// 	// this.handlePlayer1Card(gameObject,arrangepostion)
+						// 	// arrangepostion += 20
+						// 	//this.updateCardData(3,player[seat].x,player[seat].y)
+						// }else if(gameObject.data.get('blank')){
+						// 	//this.updateCardData(-1,player[seat].x,player[seat].y)
+						// 	break;
+						// }
+						if(seat<1){
+							seat++
+						}else{
+							seat--
 						}
+						break;
 					}	
 				
 			}	
