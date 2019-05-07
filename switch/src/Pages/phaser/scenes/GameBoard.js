@@ -151,10 +151,10 @@ export class GameBoard extends Phaser.Scene {
 			//result2  show only username = 'test5' 
 			await client.hydrated();
 			const nameWeGot = 'switch';
-			const result1 = await client.query({
-			query: gql(queries.listQws),
-			 fetchPolicy: 'cache-first',
-			});
+			// const result1 = await client.query({
+			// query: gql(queries.listQws),
+			//  fetchPolicy: 'cache-first',
+			// });
 			const result2 = await client.query({
 				query: gql(queries.getQw),
 				variables: {
@@ -162,7 +162,7 @@ export class GameBoard extends Phaser.Scene {
 				},
 				fetchPolicy: 'cache-first',
 			});
-			console.log(result1.data.listQws.items);
+			//console.log(result1.data.listQws.items);
 			console.log('the result is '+result2.data.getQw.y)
 			this.decideMove(result2.data.getQw.x,result2.data.getQw.y,player)
        
@@ -170,24 +170,24 @@ export class GameBoard extends Phaser.Scene {
 
 	}
 
-	async upDateScreen(){
-		let subscription;
-    (async () => {
-  		subscription = client.subscribe({ query: gql(subscriptions.onCreateQw) }).subscribe({
-   		 next: data => {
-      		console.log(data.data.onCreateQw);
-    	},
-    	error: error => {
-     	 console.warn(error);
-    		}
- 		 });
-        })();
+// 	async upDateScreen(){
+// 		let subscription;
+//     (async () => {
+//   		subscription = client.subscribe({ query: gql(subscriptions.onCreateQw) }).subscribe({
+//    		 next: data => {
+//       		console.log(data.data.onCreateQw);
+//     	},
+//     	error: error => {
+//      	 console.warn(error);
+//     		}
+//  		 });
+//         })();
 
-// Unsubscribe after 10 secs
-    setTimeout(() => {
-        subscription.unsubscribe();
-      }, 10000);
-    }
+// // Unsubscribe after 10 secs
+//     setTimeout(() => {
+//         subscription.unsubscribe();
+//       }, 10000);
+//     }
 	
 	async updateCardData(card,x,y){
 		(async()=>{
@@ -222,7 +222,7 @@ export class GameBoard extends Phaser.Scene {
 			for(var i=0;i<36;i++){
 				if(this.gameBoard[i] == i ){
 					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
-						//this.updateCardData(3,gameObject.x,gameObject.y)
+				
 						this.checkUserInfo(userName[seat],gameObject.x,gameObject.y,player[seat])
 
 
