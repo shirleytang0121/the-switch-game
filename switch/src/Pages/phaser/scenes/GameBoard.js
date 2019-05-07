@@ -4,6 +4,7 @@ import {Player} from '../objects/Player';
 import {Card} from '../objects/Card';
 import { API, graphqlOperation } from 'aws-amplify';
 import Amplify, { Auth } from 'aws-amplify';
+
 import * as mutations from '../../../graphql/mutations';
 import * as subscriptions from '../../../graphql/subscriptions'
 import * as queries from '../../../graphql/queries'
@@ -78,7 +79,10 @@ export class GameBoard extends Phaser.Scene {
 
 		let seat=0;
 			
+		let updateScreen=false
 		this.clickedBox(player,seat,userName)
+		
+		
 		   
 	}
 
@@ -105,7 +109,7 @@ export class GameBoard extends Phaser.Scene {
 		player.setY(y)
 	}
 
-	//move the card to the side
+	//move the card user collect to the side
 	handlePlayerCard(card,arrangepostion,seat,data){
 		if(seat==0&&data!=53){
 		arrangepostion-=10
@@ -135,7 +139,7 @@ export class GameBoard extends Phaser.Scene {
 							x : xV,
 							y : yV
 						};
-	 const newThing = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
+	 const newMove = await API.graphql(graphqlOperation(mutations.createTest1, {input: thething}));
 	}
 	
 	
@@ -149,18 +153,16 @@ export class GameBoard extends Phaser.Scene {
 			for(var i=0;i<36;i++){
 				if(this.gameBoard[i] == i ){
 					if(gameObject.x==player[seat].x||gameObject.y==player[seat].y){
+						//upload data 
+						
 						this.checkUserInfo(userName[seat],gameObject.x,gameObject.y,player[seat])
 						this.handlePlayerCard(gameObject,arrangepostion,seat,gameObject.data.get('card_number'))
 						arrangepostion+=15
-						// if(gameObject.data.get('card_number') == i){
-						// 	console.log("move card")
-						// 	 //this.handlePlayer1Card(gameObject,arrangepostion,seat)
-							 
-						// 	//this.updateCardData(3,player[seat].x,player[seat].y)
-						// }else if(gameObject.data.get('blank')){
-						// 	//this.updateCardData(-1,player[seat].x,player[seat].y)
-						// 	break;
-						// }
+						
+						
+
+
+						//swith player between different round
 						if(seat<1){
 							seat++
 						}else{
