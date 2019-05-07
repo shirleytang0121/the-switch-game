@@ -106,8 +106,7 @@ export class GameBoard extends Phaser.Scene {
 			const { username } = userInfo;
       if(name==username){
 				this.updateCardData(3,x,y)
-				this.getData(player)
-
+				this.decideMove(x,y,player)
 			}else{
 				alert("invalid movemet")
 			}
@@ -147,8 +146,6 @@ export class GameBoard extends Phaser.Scene {
 		
 		(async () => { 
 
-			//result1  show the list
-			//result2  show only username = 'test5' 
 			await client.hydrated();
 			const nameWeGot = 'switch';
 			// const result1 = await client.query({
@@ -170,24 +167,24 @@ export class GameBoard extends Phaser.Scene {
 
 	}
 
-// 	async upDateScreen(){
-// 		let subscription;
-//     (async () => {
-//   		subscription = client.subscribe({ query: gql(subscriptions.onCreateQw) }).subscribe({
-//    		 next: data => {
-//       		console.log(data.data.onCreateQw);
-//     	},
-//     	error: error => {
-//      	 console.warn(error);
-//     		}
-//  		 });
-//         })();
+	async upDateScreen(){
+		let subscription;
+    (async () => {
+  		subscription = client.subscribe({ query: gql(subscriptions.onCreateQw) }).subscribe({
+   		 next: data => {
+      		console.log(data.data.onCreateQw);
+    	},
+    	error: error => {
+     	 console.warn(error);
+    		}
+ 		 });
+        })();
 
-// // Unsubscribe after 10 secs
-//     setTimeout(() => {
-//         subscription.unsubscribe();
-//       }, 10000);
-//     }
+// Unsubscribe after 10 secs
+    setTimeout(() => {
+        subscription.unsubscribe();
+      }, 10000);
+    }
 	
 	async updateCardData(card,x,y){
 		(async()=>{
